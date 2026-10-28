@@ -1,0 +1,865 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#16233a">
+<meta name="description" content="AZ-104 Microsoft Azure Administrator study notes and practice quiz with explained answers.">
+<meta name="apple-mobile-web-app-title" content="AZ-104">
+<title>AZ-104 Study Notes & Quiz</title>
+<style>
+:root{--ink:#17233c;--muted:#5d6f88;--line:#e2e8f0;--blue:#1a63b8;--teal:#0a7d70;--paper:#fff;--bg:#f3f6fa;--nav:#16233a;--shadow:0 6px 24px rgba(23,42,68,.06);--radius:14px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Arial,sans-serif;background:var(--bg);color:var(--ink);margin:0;line-height:1.6}
+button,input,select{font:inherit}button{cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #70a7ee;outline-offset:2px}
+a{color:var(--blue)}
+
+/* App bar */
+.appbar{position:sticky;top:0;z-index:30;background:var(--nav);color:#fff;padding-top:env(safe-area-inset-top)}
+.appbar-inner{display:flex;align-items:center;gap:10px;padding:11px 16px;max-width:1280px;margin:0 auto}
+.logo{font-weight:800;font-size:17px;letter-spacing:-.3px}
+.logo-sub{font-size:12px;color:#9fb4cf;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.tracker{font-size:12px;background:#2c4164;border-radius:99px;padding:5px 11px;white-space:nowrap}
+.printbtn{border:1px solid #3c5578;background:transparent;color:#cfdef2;border-radius:9px;padding:6px 11px;font-size:13px}
+.printbtn:hover{background:#243a5c}
+
+/* Lesson strip (mobile) / sidebar (desktop) */
+.sidebar{background:var(--paper);border-bottom:1px solid var(--line)}
+.sidebar nav{display:flex;gap:6px;overflow-x:auto;padding:10px 14px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.sidebar nav::-webkit-scrollbar{display:none}
+.chapter-heading{display:none}
+.navitem{border:1px solid var(--line);background:#f8fafc;color:#33496a;border-radius:99px;display:flex;gap:7px;align-items:center;padding:7px 13px 7px 7px;font-size:13px;line-height:1.3;white-space:nowrap;flex-shrink:0;min-height:40px;text-align:left}
+.navitem span:last-child{max-width:190px;overflow:hidden;text-overflow:ellipsis}
+.navnum{border-radius:50%;background:#e2ebf8;color:#1a63b8;min-width:26px;height:26px;display:grid;place-items:center;font-size:12px;font-weight:700}
+.navitem.active{background:var(--blue);border-color:var(--blue);color:#fff}
+.navitem.active .navnum{background:#fff;color:var(--blue)}
+
+/* Layout */
+.main{max-width:880px;margin:0 auto;padding:18px 16px calc(84px + env(safe-area-inset-bottom));min-width:0}
+.panel{min-width:0}
+
+/* Mode tabs: bottom bar on phones */
+.modebar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;background:var(--paper);border-top:1px solid var(--line);padding:6px 10px calc(6px + env(safe-area-inset-bottom))}
+.tab{flex:1;border:0;background:transparent;color:#5d6f88;font-size:11px;font-weight:650;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 4px;border-radius:10px}
+.tab .tab-ic{font-size:20px;line-height:1.15}
+.tab.active{color:var(--blue)}
+
+/* Shared bits */
+.eyebrow{color:#4c6785;font-size:11px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase}
+.pill{border-radius:99px;padding:4px 10px;background:#e7eef7;color:#44608a;font-size:12px;font-weight:600}
+.btn{border:1px solid #c9d8e8;background:#fff;color:#24496e;border-radius:11px;padding:11px 16px;font-weight:650;font-size:14px;min-height:44px}
+.btn:hover{background:#f0f6fc}
+.btn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+.btn.primary:hover{background:#114e94}
+.btn.soft{background:#e8f4fa}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.micro{color:var(--muted);font-size:12px}
+.smallcaps{font-size:11px;letter-spacing:1.2px;font-weight:800;text-transform:uppercase;color:#5e7894}
+.hidden{display:none!important}
+
+/* Lesson notes */
+.lesson-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:2px 0 10px}
+.l-num{background:#e1edfb;color:#1e60a5;font-size:11px;font-weight:800;padding:6px 9px;border-radius:8px;letter-spacing:.5px}
+.lesson-title{font-size:clamp(22px,5.5vw,30px);letter-spacing:-.6px;line-height:1.22;margin:4px 0 10px}
+.lead{font-size:15px;color:#4d6179;margin:0 0 18px}
+.secthead{font-size:16px;margin:26px 0 10px;letter-spacing:-.2px}
+.concepts{display:grid;grid-template-columns:1fr;gap:10px;margin:14px 0 20px}
+.concept{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:15px 16px;box-shadow:var(--shadow)}
+.concept h4{font-size:14.5px;margin:0 0 6px;line-height:1.35}
+.concept p{margin:0;color:#495e73;font-size:13.5px}
+.concept code,.gotchas code,.demo-list code{font-size:.9em;background:#edf3f9;border-radius:4px;padding:1px 4px;word-break:break-word}
+.demo-list{background:var(--paper);border:1px solid var(--line);padding:14px 16px 14px 34px;border-radius:var(--radius);margin:6px 0 14px}
+.demo-list li{padding:4px 0;color:#435b72;font-size:14px}
+.gotchas{background:#fff8e9;border:1px solid #f0debb;border-radius:var(--radius);padding:14px 16px;margin-top:12px}
+.gotchas strong{color:#83510d}
+.gotchas ul{margin:8px 0 0;padding-left:20px}
+.gotchas li{color:#795924;font-size:13.5px;padding:3px 0}
+.command{background:#12263d;color:#e9f0fa;border:1px solid #253c53;border-radius:var(--radius);padding:14px;overflow-x:auto;font:12.5px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-word}
+.lessonfoot{display:flex;gap:8px;justify-content:space-between;margin-top:22px;flex-wrap:wrap}
+.lessonfoot .btn{flex:1;min-width:150px}
+
+/* Diagrams */
+.diagram{border:1px solid var(--line);border-radius:var(--radius);background:var(--paper);padding:16px;margin:0 0 18px;overflow:hidden}
+.diagramtitle{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.3px;color:#64809b;margin-bottom:12px}
+.flowrow{display:flex;flex-direction:column;align-items:stretch;gap:6px}
+.node{background:#edf4fd;border:1px solid #caddf2;border-radius:10px;padding:11px;min-width:0;flex:1;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#19426e}
+.node strong{font-size:14px}
+.node small{font-size:11px;color:#557694}
+.node.teal{background:#e8f7f4;border-color:#b3dfd6;color:#0a665e}
+.node.gold{background:#fff7e8;border-color:#ecdabb;color:#925d16}
+.node.dark{background:#23476d;color:#fff;border-color:#23476d}
+.node.dark small{color:#d1e2ef}
+.arrow{display:flex;align-items:center;justify-content:center;color:#668da9;font-size:21px;font-weight:700;transform:rotate(90deg);height:15px}
+.stack{display:flex;flex-direction:column;gap:7px}
+.stack .node{width:100%}
+.stack .arrow{transform:rotate(90deg);height:18px}
+.scopebox{border:2px solid #a9c3da;border-radius:12px;padding:12px;background:#f7fbff}
+.scopebox>.scopebox{margin-top:10px}
+.scopebox strong{font-size:13px}
+.scopebox p{font-size:12px;margin:4px 0;color:#58708a}
+.scopebox .smallbox{background:#e6f4f1;border:1px solid #b6dad3;border-radius:7px;padding:8px;font-size:12px;margin:7px 0 0 10px}
+
+/* Quiz */
+.quizhead{display:flex;flex-direction:column;gap:10px;margin-bottom:8px}
+.quizselect{border:1px solid #cbd9e5;border-radius:11px;padding:12px;background:#fff;color:#213b56;width:100%;min-height:46px;font-size:14px}
+.quiz-meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0 2px}
+.quiz-meta .btn{margin-left:auto;min-height:36px;padding:7px 12px;font-size:13px}
+.progress{height:6px;border-radius:99px;background:#e1e8ef;overflow:hidden;margin:12px 0 14px}
+.progress>div{height:100%;background:var(--blue);transition:width .2s}
+.qcard{border:1px solid #d9e4ed;border-radius:16px;background:var(--paper);box-shadow:var(--shadow);padding:18px 16px}
+.qtag{font-size:11px;font-weight:700;color:#6c86a0;text-transform:uppercase;letter-spacing:.8px}
+.qcard h2{font-size:clamp(18px,4.8vw,24px);margin:8px 0 18px;line-height:1.35;letter-spacing:-.3px}
+.options{display:grid;gap:8px}
+.option{width:100%;display:flex;gap:11px;align-items:flex-start;text-align:left;background:#f9fbfd;border:1px solid #dce6ed;border-radius:12px;padding:13px;font-size:14.5px;color:#304660;line-height:1.5;min-height:48px}
+.option:hover:not(:disabled){border-color:#6fa5d7;background:#f1f7fe}
+.option .dot{width:24px;height:24px;border:2px solid #9eb4c8;display:grid;place-items:center;border-radius:50%;flex-shrink:0;font-size:12px;font-weight:700;color:#57718e}
+.option.chosen{border:2px solid #4d83c0;background:#eef5fc;padding:12px}
+.option.good{border-color:#58a683;background:#eef9f5}
+.option.bad{border-color:#d18d8d;background:#fff3f1}
+.feedback{margin:16px 0 0;border-radius:12px;background:#eff7ff;border:1px solid #cbdff5;padding:14px 15px}
+.feedback.good{background:#eff9f4;border-color:#b9deca}
+.feedback.bad{background:#fff4ef;border-color:#edc5b8}
+.feedback h3{font-size:15px;margin:0 0 6px}
+.feedback p{font-size:13.5px;line-height:1.6;color:#3d5369;margin:4px 0}
+.rationales{margin-top:10px;border-top:1px solid #d8e2ea;padding-top:9px}
+.rationale{padding:7px 0;border-bottom:1px dashed #d8e2ea;font-size:13px;color:#526578}
+.rationale:last-child{border:0}
+.rationale strong{color:#2f435a}
+.quizfoot{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-top:16px}
+.quizfoot .btn{flex:1;min-width:120px}
+.score-chip{font-size:12px;color:#43617e;width:100%;text-align:center;order:3}
+.empty{background:#fff;border:1px dashed #b7c9d9;border-radius:14px;padding:26px;color:#506982}
+.results{background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px;text-align:center}
+.results .btn{margin:4px 2px}
+.resultnumber{font-size:46px;letter-spacing:-2px;font-weight:800;color:#20598c;margin:6px 0}
+
+/* Coverage map */
+.overviewgrid{display:grid;grid-template-columns:1fr;gap:10px}
+.overviewcard{background:#fff;border:1px solid var(--line);padding:14px;border-radius:12px}
+.overviewcard b{font-size:14px}
+.overviewcard p{color:#58708a;font-size:12px;margin:6px 0}
+.overviewcard .btn{width:calc(50% - 4px);margin-top:8px}
+.scope-note{border-left:3px solid #5c9f91;background:#eef8f5;padding:12px 15px;border-radius:6px;font-size:13px;color:#42675d;margin:16px 0}
+.footer{font-size:12px;color:#72849a;margin-top:28px}
+
+/* Tablet and up */
+@media (min-width:720px){
+.concepts{grid-template-columns:repeat(2,minmax(0,1fr))}
+.flowrow{flex-direction:row;flex-wrap:wrap}
+.arrow{transform:none;height:auto;min-width:20px}
+.node{min-width:120px}
+.quizhead{flex-direction:row;align-items:center;justify-content:space-between}
+.quizselect{width:auto;max-width:380px}
+.qcard{padding:26px}
+.quizfoot .btn{flex:0 0 auto}
+.score-chip{order:0;width:auto}
+.overviewgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+/* Desktop */
+@media (min-width:960px){
+.shell{display:grid;grid-template-columns:280px minmax(0,1fr);max-width:1280px;margin:0 auto;align-items:start}
+.sidebar{border-bottom:0;background:transparent;position:sticky;top:58px;max-height:calc(100vh - 58px);overflow-y:auto;padding:18px 0 18px 16px}
+.sidebar nav{flex-direction:column;overflow:visible;padding:0;gap:3px}
+.chapter-heading{display:block;font-size:11px;text-transform:uppercase;letter-spacing:1.3px;color:#74879e;font-weight:700;margin:16px 6px 6px}
+.navitem{white-space:normal;border-radius:10px;width:100%;background:transparent;border-color:transparent;padding:8px 10px 8px 7px}
+.navitem span:last-child{max-width:none}
+.navitem:hover{background:#e9f0f8}
+.navitem.active{background:var(--blue);color:#fff}
+.main{padding:26px 34px 70px}
+.modebar{position:static;border:0;border-bottom:1px solid var(--line);background:transparent;padding:0;margin-bottom:22px;gap:4px;justify-content:flex-start}
+.tab{flex:0 0 auto;flex-direction:row;font-size:14px;padding:11px 14px;border-bottom:3px solid transparent;border-radius:0;gap:7px}
+.tab .tab-ic{font-size:16px}
+.tab.active{border-color:var(--blue)}
+.overviewgrid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+
+@media print{
+body{background:#fff;color:#111}
+.appbar,.sidebar,.modebar,.btn,.quizfoot,.quizhead,.quiz-meta,.footer,.lessonfoot{display:none!important}
+.shell{display:block}
+.main{padding:0;max-width:none}
+.lesson-title{font-size:21px}
+.concepts{grid-template-columns:1fr 1fr;gap:8px}
+.concept{break-inside:avoid;box-shadow:none;padding:10px}
+.diagram{break-inside:avoid}
+.lessonBlock{break-before:page}
+.lessonBlock:first-child{break-before:auto}
+.qcard{box-shadow:none}
+}
+</style>
+</head>
+<body>
+<header class="appbar"><div class="appbar-inner"><span class="logo">AZ-104</span><span class="logo-sub">Study notes &amp; quiz</span><span class="tracker" id="tracker">0 answered</span><button class="printbtn" id="printbtn" type="button">Print</button></div></header>
+<div class="shell">
+  <aside class="sidebar"><nav id="nav" aria-label="Course lessons"></nav></aside>
+  <main class="main">
+    <div class="modebar" role="tablist" aria-label="Study mode">
+      <button class="tab active" data-view="notes" role="tab" aria-selected="true"><span class="tab-ic">📖</span><span>Notes</span></button>
+      <button class="tab" data-view="quiz" role="tab" aria-selected="false"><span class="tab-ic">🧠</span><span>Quiz</span></button>
+      <button class="tab" data-view="map" role="tab" aria-selected="false"><span class="tab-ic">🗂</span><span>Lessons</span></button>
+    </div>
+    <div id="notes" class="panel"></div><div id="quiz" class="panel hidden"></div><div id="map" class="panel hidden"></div>
+    <p class="footer">Paraphrased study notes based on Alex Potasnick's AZ-104 course. Azure changes often, so check Microsoft Learn for the latest before your exam.</p>
+  </main>
+</div>
+<script>
+const LESSONS = [
+{n:1,title:'Introduction & course roadmap',unit:'Azure administration',goal:'Understand what AZ-104 covers and why these services belong together.',concepts:[
+['AZ-104 objective','The course prepares you to administer Azure identity, governance, storage, compute and networking, with implementation, management and monitoring in scope. The uploaded segment focuses first on Azure administration and then governance/compliance.'],
+['Foundation','AZ-900-level cloud basics help, but the instructor begins with resources, subscriptions and Azure Resource Manager so you can follow later demonstrations.'],
+['Four questions to ask','For every Azure action ask: <strong>What resource?</strong> Where is its <strong>scope?</strong> Which identity is <strong>authorized?</strong> Which interface or template sends the request?']
+],steps:['This is an orientation lesson; no Azure resources are created.'],traps:['The course title includes identities and governance, but the first lessons explain general Azure administration before going deeper into authorization.'],diagram:'hierarchy'},
+{n:2,title:'Understanding Azure Resource Manager',unit:'Azure administration',goal:'Distinguish resource, resource group, subscription, tenant, ARM and resource provider.',concepts:[
+['Resource','The individual Azure-managed service instance: a virtual machine for compute, a storage account for storage, or a virtual network for network connectivity. Resources deliver functionality; not every resource is billed in the same way.'],
+['Resource group (RG)','A <strong>logical grouping</strong> of related Azure resources. Organize by shared lifecycle, dev/test/production environment, ownership, security or workload. Each resource lives in exactly one RG at a time.'],
+['Subscription','Contains RGs; important for <strong>billing</strong>, quotas and scopes for deployments, governance and access. An organization can have many subscriptions for teams, environments or cost centers.'],
+['Azure Resource Manager (ARM)','Azure’s <strong>management/orchestration layer</strong> for control-plane requests. Azure Portal, Azure CLI, PowerShell and ARM deployments use REST APIs to ask ARM to create, update, query or delete Azure resources. ARM is not the same thing as an ARM template.'],
+['Resource providers','The handlers for resource types. A storage request goes to <code>Microsoft.Storage</code>; a VM request to <code>Microsoft.Compute</code>; network requests to <code>Microsoft.Network</code>. ARM routes operations through providers.'],
+['Microsoft Entra ID tenant','Identity and access management boundary, formerly Azure Active Directory. Users authenticate in a tenant; permitted identities can manage subscription resources. <strong>A subscription trusts one tenant at a time</strong>, but one tenant can have multiple subscriptions. A tenant does not automatically grant every user permission to every resource.'],
+['Request path','User signs in → Portal/CLI/PowerShell creates a REST request → ARM checks access and coordinates → resource provider performs the appropriate operation on the resource.']
+],steps:['Lecturer presents an overview of the resource/RG/subscription hierarchy and ARM request flow, not a new resource deployment.'],traps:['Resource provider ≠ resource; tenant ≠ subscription; ARM service ≠ ARM JSON template.','An identity from the right Entra tenant still requires appropriate authorization (RBAC) to perform actions.'],diagram:'flow'},
+{n:3,title:'Using the Azure Portal and Cloud Shell',unit:'Azure administration',goal:'Identify what the Portal does, and how Cloud Shell differs from it.',concepts:[
+['Azure Portal','Browser-based GUI at <code>portal.azure.com</code>. Create, configure, monitor and delete Azure resources; inspect subscriptions and resource groups; use search, All services, dashboard, favorites, recently used resources and Marketplace/help references.'],
+['Dashboard and search','Dashboard tiles can visualize VM CPU, memory and service metrics. Search finds services, named resources, Marketplace entries and documentation. A dashboard is a view, not a separate compute resource.'],
+['Virtual Machine creation','Portal → Virtual machines → Create → Azure virtual machine. Choose an existing RG or make one, set name <code>VM1</code>, region, availability/security settings, image (instructor discusses Windows Server 2022), size and administrator credentials; Review + create → Create.'],
+['Deployment details','The VM requires supporting resources; after creation the Portal lists other deployed dependencies such as network interface and networking components. Resource types are grouped by providers (e.g. <code>Microsoft.Compute/virtualMachines</code>).'],
+['Cloud Shell','Browser-based terminal inside the Portal with <strong>Bash</strong> or <strong>PowerShell</strong>. Azure CLI and Azure PowerShell are available there; you do not have to install them on your laptop for a Cloud Shell demo.'],
+['Cloud Shell storage choice','You may mount persistent storage, or choose <strong>no storage account required</strong> for a temporary session. Persistent storage keeps shell files; temporary shell contents can disappear when sessions end. The demo initially selects PowerShell and no storage account required.'],
+['Cloud Shell interface','Can switch Bash ↔ PowerShell (restarts session), restart, upload/download files, open a new session, use editor, configure web preview/ports, alter display settings and access Help. The old experience had a limited code editor.']
+],steps:['Sign in → inspect navigation and search.','Create <code>VM1</code> in an RG; review deployment details and VM configuration.','Open Cloud Shell, choose PowerShell and temporary storage option; review controls including Bash switch and file management.'],traps:['The Azure Portal is not “only for VMs” or “only for billing”, it manages numerous Azure services.','Cloud Shell is a terminal <em>inside</em> the Portal; Bash and PowerShell are shell environments, while Azure CLI and Az PowerShell are management tools.'],diagram:'vm'},
+{n:4,title:'Using Azure CLI and PowerShell',unit:'Azure administration',goal:'Read and compare two programmatic resource-creation methods.',concepts:[
+['Azure CLI','Cross-platform <code>az</code> command-line utility. Syntax often resembles <code>az &lt;service&gt; &lt;resource&gt; &lt;verb&gt; --option value</code>. Runs locally when installed or in Cloud Shell. Useful for scripts and automation.'],
+['Azure PowerShell','<code>Az</code> PowerShell cmdlets, often <code>Verb-AzNoun</code>, such as <code>New-AzVM</code>, <code>Get-AzResourceGroup</code> and <code>New-AzVirtualNetwork</code>. Returns rich objects whose properties can be accessed with a dot.'],
+['CLI discovery','<code>az group list</code> returns RG metadata, commonly JSON; <code>--query</code> selects desired fields, and <code>--output tsv</code> avoids JSON brackets/quotes when only a scalar name is needed.'],
+['Bash variables','Use command substitution, e.g. <code>rgcli=$(az group list --query "[0].name" -o tsv)</code> if you know which group you want. <code>echo "$rgcli"</code> checks it. The instructor uses a variable for the target group; his lab had one RG.'],
+['CLI VNet creation','<code>az network vnet create</code> accepts name, RG and address prefix; multiline Bash commands use <code>\</code> for line continuation. He sees <code>provisioningState: Succeeded</code>.'],
+['PowerShell objects','<code>$rgps = Get-AzResourceGroup</code> stores object(s); <code>$rgps.ResourceGroupName</code> and <code>$rgps.Location</code> access properties when <code>$rgps</code> is a single RG object. In the lab Location was <code>southcentralus</code>.'],
+['PowerShell VNet creation','<code>New-AzVirtualNetwork</code> with a name, <code>-ResourceGroupName</code>, <code>-Location</code>, <code>-AddressPrefix</code>. He confirms success, then sees one CLI-created and one PowerShell-created VNet in the Portal.'],
+['Choosing a tool','Neither CLI nor PowerShell is inherently better. Both manage Azure and automate tasks. CLI syntax uses <code>az ...</code>; PowerShell uses named cmdlets and object pipelines.']
+],steps:['Open Cloud Shell Bash; run <code>az group list</code>.','Filter only the RG name, save it in <code>rgcli</code>; create VNet through <code>az network vnet create</code>.','Switch to PowerShell; run <code>Get-AzResourceGroup</code>, store output in <code>$rgps</code>, use its name/location properties; create another VNet with <code>New-AzVirtualNetwork</code>.'],traps:['<code>az group list</code> returns a list; a script designed for one RG needs to select the correct RG, not blindly reuse multiple names.','A variable stores a value; it is not an Azure resource.','Cloud Shell Bash, Azure CLI, PowerShell, and ARM are four different concepts.'],diagram:'tools',code:`# Azure CLI in Cloud Shell Bash (illustrative example)\nrgcli=$(az group list --query '[0].name' -o tsv)\necho "$rgcli"\naz network vnet create --resource-group "$rgcli" --name myVnet --address-prefix 10.0.0.0/16\n\n# Azure PowerShell (separate PowerShell session)\n$rgps = Get-AzResourceGroup -Name 'myRG'\n$rgps.Location\nNew-AzVirtualNetwork -Name 'myPsVnet' -ResourceGroupName $rgps.ResourceGroupName -Location $rgps.Location -AddressPrefix '10.1.0.0/16'`},
+{n:5,title:'Discovering ARM Templates',unit:'Azure administration',goal:'Read the anatomy of declarative infrastructure-as-code.',concepts:[
+['Infrastructure as Code (IaC)','The intended infrastructure is codified in a file. An ARM JSON template declares the desired Azure resources and their settings; it supports consistent, repeatable deployments, disaster recovery and complex reusable architectures such as hub-and-spoke networks.'],
+['Declarative','Describe <strong>what state you want</strong> rather than giving an administrator a click-by-click procedure. ARM handles deployment coordination and dependencies.'],
+['Mandatory: $schema','A URL referring to the JSON schema for the template type/scope, used for validation and editor assistance such as IntelliSense. The source shows an RG deployment schema.'],
+['Mandatory: contentVersion','Developer-assigned template version string, commonly <code>1.0.0.0</code>. Source emphasizes it is not the same as source control such as Git.'],
+['Mandatory: resources','Array describing one or more resources to deploy or update. Each resource definition specifies type, API version, name, location where applicable, and type-specific properties.'],
+['Optional: parameters','Values supplied at deployment time, useful for reusing one template in dev/test/prod with different names, sizes or regions; a separate parameter file can also supply them.'],
+['Optional: variables','Reusable values or expressions calculated within the template, e.g. a location or resource name. Unlike a parameter, a variable is not typically provided by the person running a deployment.'],
+['Optional: functions','User-defined reusable expressions/logic; built-in ARM functions also exist. The functions section is for custom functions, not every call to <code>resourceGroup()</code> or <code>parameters()</code>.'],
+['Optional: outputs','Return computed values to another script or CI/CD pipeline when deployment finishes, such as created resource names or IDs.'],
+['References & dependencies','A resource can reference another resource ID; explicit <code>dependsOn</code> or dependency-inducing references let ARM create in the required order. Array order alone is not a safe deployment-order mechanism.']
+],steps:['Lecturer explains the template structure and the role of each JSON section; this is the conceptual lesson preceding the hands-on editor demo.'],traps:['ARM <strong>service</strong> is the orchestration layer; ARM <strong>template</strong> is JSON submitted to the service.','Writing/saving a JSON template does not itself create a running resource.'],diagram:'arm',code:`{\n  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",\n  "contentVersion": "1.0.0.0",\n  "parameters": { "vnetName": { "type": "string" } },\n  "variables": {},\n  "resources": [ /* resource definitions */ ],\n  "outputs": {}\n}`},
+{n:6,title:'Using ARM Templates: hands-on demo',unit:'Azure administration',goal:'Follow the exact template editor demonstration and separate definition from deployment.',concepts:[
+['Explore an existing template','Portal Create a resource → examine Review + create → Download a template for automation (instructor shows an incomplete web app example); or open Resource group → Deployments → a deployment → Template to inspect deployed JSON.'],
+['Deploy a custom template','Portal search <strong>Deploy a custom template</strong>. You can use common or Quickstart templates, or choose to build your own in the editor.'],
+['Add VNet definition','Editor → Add resource → Virtual network → name → OK. The editor generates JSON and reusable variables. At this moment the VNet exists <strong>in the template only</strong>, not necessarily in Azure.'],
+['Add VM definition','Choose Windows virtual machine → name <code>VM1</code>. Select the VNet already defined <em>in the template</em>, rather than defining a second unrelated VNet. The editor adds the NIC, VM and storage resource definitions and related variables.'],
+['Save and parameterize','Save template → choose an existing RG or create a new one (he creates a new RG), region and required parameters, including VM name, administrator username/password, OS type and storage type. Keep demo defaults.'],
+['Deploy and inspect','Review + create → Create → ARM validates/orchestrates → deployment succeeds → open RG to see newly deployed resources.'],
+['What the components do','VM supplies compute; VNet/subnet supplies network address space; NIC connects VM to a subnet; storage account is an additional storage resource. A VM also has OS storage, generally managed disks, an extra storage account is <strong>not always required</strong> for modern VMs.'],
+['Create or reference','Templates can define new resources, manage existing matching resources or reference existing resources; selecting a VNet defined earlier in this same template is not the same as selecting a pre-existing Azure VNet.']
+],steps:['Inspect an existing ARM template from RG deployments.','Use Deploy a custom template → build your own → Add VNet → Add Windows VM named VM1 → link it to the defined VNet.','Save; create a new RG, fill parameters and deploy; verify success and the generated NIC/storage/VM/VNet definitions.'],traps:['Creating JSON ≠ deploying; selecting the VNet inside the template ≠ selecting an already-running VNet.','The Portal editor created many JSON sections automatically; the instructor did not type each line by hand.'],diagram:'vm'},
+{n:7,title:'Discovering Azure Bicep',unit:'Azure administration',goal:'Understand Bicep syntax and why it compiles to ARM JSON.',concepts:[
+['Bicep purpose','Azure-native declarative IaC language that is more concise and easier to author/read than raw ARM JSON, while describing the same kinds of Azure deployments.'],
+['Bicep pipeline','<strong>.bicep → compiled ARM JSON → Azure Resource Manager → resource providers → resources</strong>. Bicep does not directly replace ARM or call resource providers instead of ARM.'],
+['Syntax','<code>param location string = resourceGroup().location</code>, <code>var sku = ...</code>, <code>resource appServicePlan \'Microsoft.Web/serverfarms@...\' = { ... }</code>. The keyword <code>resource</code> and <code>@apiVersion</code> distinguish Bicep from CLI, PowerShell and JSON.'],
+['Symbolic names','A symbolic resource name such as <code>appServicePlan</code> is referenced inside the file; a property such as <code>appServicePlan.id</code> can connect a web app to the plan.'],
+['Demo resources','Instructor uses a GitHub example that defines a <strong>Microsoft.Web/serverfarms App Service Plan</strong> and <strong>Microsoft.Web/sites Web App</strong>, plus variables like SKU and Linux runtime/version and a default location parameter.'],
+['Cloud Shell editing','Open Cloud Shell editor (or <code>code .</code> in the course), paste the example, save as <code>deploy.bicep</code> in persistent Cloud Shell storage, then deploy with <code>New-AzResourceGroupDeployment</code> and the resource-group variable.'],
+['Failed first deploy','Web App name <code>AwesomeApp</code> was already taken; web app names must be unique in their naming scope. Instructor replaces hardcoded name with required <code>param webAppName string</code>, runs again, supplies unique value, and deployment succeeds.'],
+['Verify output','Open RG to see Web App and App Service Plan; under Deployments → Template Azure displays underlying generated ARM JSON, even when Bicep was supplied.']
+],steps:['Open Cloud Shell code editor; paste example Bicep and save <code>deploy.bicep</code>.','Deploy through PowerShell; inspect name-collision error.','Replace hardcoded web app name with required parameter; supply a unique name and redeploy successfully.','Open deployed resources and inspect generated ARM template.'],traps:['Bicep is <strong>declarative</strong>, not imperative, and not JSON.','Symbolic name <code>appServicePlan</code> and deployed resource name are distinct.'],diagram:'bicep',code:`param location string = resourceGroup().location\nparam webAppName string\n\n// Illustrative syntax (not the instructor's full source)\nresource plan 'Microsoft.Web/serverfarms@2022-09-01' = {\n  name: 'demo-plan'\n  location: location\n  sku: { name: 'B1' }\n}\n\nresource web 'Microsoft.Web/sites@2022-09-01' = {\n  name: webAppName\n  location: location\n  properties: { serverFarmId: plan.id }\n}`},
+{n:8,title:'Migrating ARM JSON to Bicep',unit:'Azure administration',goal:'Understand build vs decompile and the instructor’s file chain.',concepts:[
+['Build','<code>az bicep build --file deploy.bicep --outfile test.json</code> compiles a Bicep file <strong>into ARM JSON</strong>. Build occurs automatically as part of normal Bicep deployment; you can run it manually to inspect output.'],
+['Decompile','<code>az bicep decompile --file test.json</code> attempts to turn ARM JSON <strong>into Bicep</strong>; it produced <code>test.bicep</code>. This is a <strong>best effort</strong> conversion, review/refactor generated code, especially complex templates.'],
+['The three files','<code>deploy.bicep</code> (source) → <code>test.json</code> (build output) → <code>test.bicep</code> (decompile output). <code>ls</code> lists files and <code>cat</code> prints contents.'],
+['What the compiled JSON shows','Parameters for location and webAppName; SKU/LinuxFxVersion variables; two resource types <code>Microsoft.Web/serverfarms</code> and <code>Microsoft.Web/sites</code>.'],
+['Deploy decompiled file','Create Bash variable for RG name, then run <code>az deployment group create</code> referencing <code>test.bicep</code>, provide a unique web app name, and confirm success.'],
+['List resources','<code>az resource list --resource-group ... --output table</code> shows a Cloud Shell storage account and newly deployed App Service Plan and Web App.']
+],steps:['Use <code>cat deploy.bicep</code> to examine previous file.','Build to <code>test.json</code>, inspect JSON using <code>cat</code>.','Decompile <code>test.json</code> to <code>test.bicep</code>; review warning and contents.','Deploy <code>test.bicep</code> to RG with <code>az deployment group create</code>; list resources.'],traps:['Build and decompile go in opposite directions.','Conversion does not equal deployment; a separate group deployment creates resources.','The instructor explicitly cautions that decompile may require manual fixes.'],diagram:'bicep',code:`az bicep build --file deploy.bicep --outfile test.json\naz bicep decompile --file test.json\nrgName=$(az group list --query '[0].name' -o tsv)\naz deployment group create --name DemoDeployment2 --resource-group "$rgName" --template-file test.bicep\naz resource list --resource-group "$rgName" --output table`},
+{n:9,title:'Exam tips: Azure administration',unit:'Azure administration',goal:'Consolidate the entire first section for the exam.',concepts:[
+['Hierarchy refresher','Resources are managed under resource groups, which belong to subscriptions; subscriptions collect billing and can be associated with an Entra tenant.'],
+['Management refresher','Portal, Cloud Shell, CLI and PowerShell send requests through ARM and resource providers. All can manage services in different ways.'],
+['Template essentials','ARM template is JSON IaC. Mandatory: schema, contentVersion and resources. Optional: parameters, variables, user-defined functions and outputs.'],
+['Bicep essentials','Bicep is human-friendlier declarative IaC; converts to ARM JSON for deployment. <code>build</code> produces JSON; <code>decompile</code> produces Bicep from JSON.'],
+['Recognize syntax','<code>az network ...</code> = CLI; <code>New-Az...</code> = PowerShell; JSON with <code>"apiVersion"</code> = ARM template; <code>resource x \'Microsoft...@...\' = {}</code> = Bicep.']
+],steps:['This is an exam review with no new standalone infrastructure deployment.'],traps:['A question may describe the ARM management service while asking about a JSON template; read which term it targets.'],diagram:'tools'},
+{n:10,title:'Managing subscriptions',unit:'Governance & compliance',goal:'Connect subscriptions to billing, security scope, quotas and offers.',concepts:[
+['Subscription as billing unit','Costs of billed Azure resources roll up under the subscription. Resource groups themselves are free; resources can be free, freemium or billed differently.'],
+['Scope beyond billing','Subscriptions are also boundaries for policy, RBAC role assignments, deploying ARM/Bicep, viewing quota and organizing resources.'],
+['Tenant association','One subscription has a trust relationship with a single Entra ID tenant at a time; one tenant can be linked with many subscriptions. Authorized tenant identities can receive roles for subscription operations and billing.'],
+['Segmentation strategies','An organization can separate subscriptions by production/staging/development, marketing vs engineering, business units, geography or billing responsibility. Their names are conventions, not forced technical boundaries.'],
+['Offers','Instructor discusses Enterprise Agreement (planned commitment/up-front model in example), Pay-As-You-Go, Free Trial, Visual Studio/MSDN benefits, Azure for Students, and Azure in CSP (<strong>Cloud Solution Provider</strong>, a partner model).'],
+['Portal demo','Subscriptions → select subscription → inspect overview, Cost Analysis, alerts, Budgets, Partner information, resources and resource groups. In his lab he lacks permission to see billing detail.'],
+['Quotas and limits','Cloud is not unlimited: the Usage + quotas panel exposes resource limits. Many quotas can be raised by requesting an increase; requesting does not guarantee approval.'],
+['Adding subscription','The Portal can show offers such as Pay-As-You-Go, Free Trial and Azure for Students.']
+],steps:['Inspect subscription offers and the meaning of CSP/EA/Pay-As-You-Go.','Portal → Subscriptions → current subscription → Usage + quotas, costs and resource group listings.','View add-subscription options.'],traps:['Subscriptions are not just bills: they provide important security/governance scopes too.','Different Azure resource types have separate limits; “unlimited cloud” is misleading.'],diagram:'hierarchy'},
+{n:11,title:'Exploring resource groups',unit:'Governance & compliance',goal:'Understand what a resource group groups, and what it does not.',concepts:[
+['Logical container','An RG helps manage related resources. The folder analogy works only partially because <strong>resource groups cannot nest inside other RGs</strong>.'],
+['Grouping strategies','Use shared application lifecycle (resources created/updated/deleted together), IaaS vs PaaS workloads, resource type, team, department, or location. There is no required universal naming structure.'],
+['Cost and membership','RGs are free as containers. <strong>A resource belongs to one RG at a time</strong>, though supported resources can move between RGs. One RG can contain multiple resource types.'],
+['Region distinction','The RG has a metadata location, but member resources may be in entirely different Azure regions, even multiple regions within one RG.'],
+['Not a firewall','RGs are organizational, not network isolation boundaries. Two VMs in different RGs can still communicate if network topology and security rules allow it.'],
+['RBAC/permissions','A resource group is a useful authorization scope, so administrators can manage an application as a logical unit.'],
+['Portal demo','Open Resource groups → pick an RG → view resources and settings; see the organization and create/open RGs. A common pattern is to create RG first then add resources.']
+],steps:['Review differences between RGs, subnets and subscriptions.','Open RG list in Portal; examine contents, regional metadata and settings.'],traps:['RG location does not force a VM into the same region.','You cannot nest RGs, and RG boundaries do not block traffic.','Deleting an RG deletes the resources within it; organize shared-resource lifecycles thoughtfully.'],diagram:'hierarchy'},
+{n:12,title:'Managing Azure costs',unit:'Governance & compliance',goal:'Estimate, monitor and act on Azure spending.',concepts:[
+['Cost-management policy template','The instructor discusses a Cloud Adoption Framework-style cost management process: document business risks, metrics/indicators, policies, monitoring, enforcement/violations and the toolchain.'],
+['Risks','<strong>Overprovisioning:</strong> choosing a larger VM tier than needed. <strong>Underutilization:</strong> keeping unnecessary VM instances/resources running, e.g. dev/test at weekends. <strong>Overbudget:</strong> exceeding the agreed spending limit.'],
+['Metrics and indicators','Metrics are measurements (spend, projected spend). Indicators/thresholds define when to act (e.g. warn at 75% of a monthly cap). The lecture uses $10,000/month in the conceptual example.'],
+['Policy processes','Plan, review, report, establish training and monitoring responsibilities. A budget violation may prompt investigation and re-evaluation, not necessarily punishment.'],
+['Pricing Calculator','Estimate price <strong>before</strong> deployment by choosing service, tier, OS, region and instances. Demo configures an App Service Standard S3 with four instances; results can be exported/shared.'],
+['TCO Calculator','Compare estimated costs of on-premises servers/storage/networking/databases with migration to Azure, under assumptions such as redundancy and operating costs.'],
+['Cost Management + Billing','Inspect actual costs, trends and forecasts by service, resource group, region, time and resource; explore invoices and cost analysis.'],
+['Budget demo','Portal Budgets → create budget named <code>budget</code> for <strong>$150</strong>, add an example alert at <strong>75%</strong> and a recipient; inspect budget line on cost analysis chart. <strong>A budget alert does not automatically stop billing.</strong>'],
+['Advisor cost recommendations','Azure Advisor can suggest savings. Demo shows Cost category and creates a recommendation digest every seven days via Monitoring → Recommendation digests and an action group.']
+],steps:['Review cost-risk template (risks → metrics/thresholds → policies → monitor → follow-up).','Try pricing and TCO calculators; inspect Cost Management cost analysis.','Create $150 demo budget with 75% alert; inspect Azure Advisor and weekly recommendation digest.'],traps:['Pricing Calculator = estimate future prices; Cost Analysis = examine existing spend; TCO = Azure vs on-prem comparison; Advisor = recommendations.','A budget is not an automatic spending hard limit.','An action group is used to route notifications.'],diagram:'cost'},
+{n:13,title:'Tagging resources',unit:'Governance & compliance',goal:'Organize resources using editable key-value metadata.',concepts:[
+['Tag = key + value','Example <code>Environment: Prod</code> or <code>Department: Finance</code>. Tags can label subscriptions, RGs and many Azure resources; support organization, filtering and cost attribution.'],
+['No default inheritance','A tag on an RG <strong>does not automatically appear</strong> on its member VMs/other resources, and tags on a subscription do not automatically propagate to RGs. Policy/automation can implement propagation if desired.'],
+['Why tags help','RG names cannot simply be renamed; tags are editable and allow multiple classification dimensions independent of physical RG organization.'],
+['Automation targeting','Scripts can filter resources by tags, for example stop development servers over weekends, except a tagged subset needed by a particular team.'],
+['Demo: assign','RG → Tags (or Overview tag field) → enter <code>Environment</code> as key, <code>Prod</code> as value → Apply. Instructor verifies RG has tag; an Application Insights resource inside still lacks it and retains its earlier Department/Owner tags.'],
+['Demo: display/filter','All resources → Manage view → Edit columns → add Tags column (or a specific tag), save and inspect key/value metadata across resources.']
+],steps:['Add <code>Environment: Prod</code> on the RG.','Open child Application Insights resource and verify it did not inherit RG tag.','Show Tags column from All resources.'],traps:['Tag ≠ RBAC role, Azure Policy, network security rule or resource group.','Multiple tags can coexist; tags label resources, they do not by themselves enforce actions.'],diagram:'tags'},
+{n:14,title:'Locking and moving resources',unit:'Governance & compliance',goal:'Choose the correct lock and predict consequences of moving a resource.',concepts:[
+['Delete / CanNotDelete lock','Prevent deleting a locked scope, but allow reading and many modifications. Useful to prevent accidental deletions. Can apply to resources, RGs and subscriptions; higher-scope locks affect descendants.'],
+['Read-only lock','Allow reading; prevent changes and deletion. More restrictive than a Delete lock. Some operations that look like reads can internally require writes and therefore fail under a read-only lock.'],
+['Move options','For supported resources: move between RGs, sometimes subscriptions; moving across regions generally requires a separate migration/move procedure rather than merely changing RG. Not every type supports every move.'],
+['Cross-subscription condition','Instructor notes destination subscription must use the same Entra tenant for the standard cross-subscription resource move operation.'],
+['Changing RG does not move region','Moving a VM from an East-US RG to a West-US RG does not change the VM’s actual Azure region.'],
+['Temporary move lock','During move, resources are locked against changes, but generally continue serving requests. Moving a group of dependent resources may require coordinating them.'],
+['IDs change','Resource IDs contain subscription and RG segments, so moving RG/subscription changes the resource ID. Update scripts, references, monitoring automation and IaC that depend on old IDs.'],
+['Portal move demo','Create target RG → source RG → select supported resources → Move → new RG → validation → acknowledge ID change → Move. Confirm old RG empty and new RG contains resources.'],
+['Lock demo','Choose load balancer → Settings → Locks → Add Delete lock → attempt delete → Azure rejects due to scope lock. The lock can later be edited or removed by someone authorized.']
+],steps:['Create target RG; move selected resources after validation; confirm relocation and new IDs.','Add Delete lock on load balancer; attempt deletion and inspect failure.'],traps:['A Delete lock still permits modifications; a Read-only lock blocks modifications too.','RG move ≠ region migration; resource ID changes with RG/subscription move.','Azure Policy and a resource lock serve different purposes.'],diagram:'locks'},
+{n:15,title:'Understanding Azure Policy',unit:'Governance & compliance',goal:'Separate definitions, assignments, initiatives, compliance checks and effects.',concepts:[
+['Policy definition','A rule describing what Azure should evaluate and what effect to apply if a resource fails. Built-in definitions exist, or you can write a custom definition.'],
+['Policy assignment','Applying a definition at a <strong>scope</strong> such as management group, subscription or RG, optionally with exclusions, resource selectors and parameters. Defining a policy alone does not enforce it everywhere.'],
+['Initiative','A group of related policy definitions/assignments used to manage a compliance objective together.'],
+['Condition & effect','Policy evaluates properties such as VM size, required tag, patching/security setting or storage SKU. Effects discussed: <strong>Deny</strong> (block), <strong>Audit</strong> (record/report), and modify/remediation approaches to change noncompliant configurations; can also disable an effect.'],
+['Periodic compliance checks','Course describes an hourly compliance cycle and cautions that a new assignment may take time to take effect; actual enforcement timing and effects depend on the policy mechanism.'],
+['Built-in storage SKU policy','Demo chooses <code>Storage accounts should be limited by allowed SKUs</code>. JSON includes display name, description, allowed SKU parameters, policy rule and an <code>Audit/Deny/Disabled</code> effect choice; default demonstrated is Deny.'],
+['Assignment demo','Assign to whole subscription, leave exclusions/advanced settings blank, enable enforcement; choose six Standard SKUs, no remediation identity, add non-compliance message, Review + create.'],
+['Test demo','After ~10 minutes, attempt to create a Premium Locally Redundant Storage Account in new RG. Azure validation fails because Premium is not an allowed SKU; it shows the configured message.'],
+['Remediation','Some effects require a managed identity to modify resources; instructor demonstrates the remediation tab but deliberately does not configure one for the Deny example.']
+],steps:['Open Azure Policy → Definitions → built-in allowed-SKUs policy → examine JSON and Assign.','Choose subscription scope and Standard SKUs; enable Deny; create assignment.','Attempt Premium storage creation; observe policy block.'],traps:['Definition = rule; Assignment = where rule applies; Initiative = collection of related rules.','Policy can audit instead of blocking; remediation is separate from Deny.','An RBAC role permits operations; Azure Policy places governance constraints on what is allowed.'],diagram:'policy'},
+{n:16,title:'Using Management Groups',unit:'Governance & compliance',goal:'Build tenant-level hierarchy and understand inherited governance scope.',concepts:[
+['Management group','Logical parent container of subscriptions and optionally child management groups. Used to apply governance and access management across multiple subscriptions.'],
+['Tenant root management group','Top of the management-group hierarchy; the instructor notes you cannot put a management group above the root. Root group itself cannot be moved/deleted.'],
+['Nested hierarchy','Root → MG1 → MG2 → subscriptions → RGs → resources. A subscription belongs at one place in the management-group tree at a time. The course teaches a maximum six levels below root.'],
+['Inheritance','Azure Policy assignments and Azure RBAC role assignments made at a parent management group can affect child management groups, subscriptions, RGs and resources below it.'],
+['Create demo','Portal → Management groups → Start using management groups. Enter Group ID (<strong>immutable</strong> after creation) and Display name (<strong>editable</strong>); Submit; first group appears under tenant root.'],
+['Create child','Open MG1 → Create another group → MG2. Inspect the Parent/path property, compare a sibling at root vs child under MG1; can also add subscriptions to management-group hierarchy.'],
+['Governance in Portal','Open Access control (IAM) for RBAC role assignment; or Assign policy for a built-in policy; view budgets that can be scoped to a management group. Instructor shows options without necessarily executing each.'],
+['Root elevation','Final exam tips: ordinary users are not automatically given powerful root management permissions. A tenant global administrator may temporarily elevate access to assign Azure RBAC at the root for recovery/administration, then remove elevation.']
+],steps:['Create MG1 under Tenant Root Group using Group ID and Display Name.','Open MG1 → create nested MG2; inspect hierarchy/path and parent relationships.','Review IAM, policy assignment and budgets at management-group scope.'],traps:['Management groups contain subscriptions and other MGs, not individual VMs directly.','Group ID cannot be renamed after creation; display name can.','The inherited governance hierarchy is not the same as network connectivity.'],diagram:'mg'},
+{n:17,title:'Exam tips: governance & compliance',unit:'Governance & compliance',goal:'Integrate the rules from lessons 10-16 and avoid near-miss exam distractors.',concepts:[
+['Subscription rules','Billing unit, governance/RBAC/deployment scope, and Entra tenant trust (one tenant per subscription at a time; many subscriptions per tenant).'],
+['RG rules','Free logical container, one RG per resource, resources in multiple regions possible, no nested RGs, and RG membership does not create a network barrier.'],
+['Policy formula','Definition = what to check/effect. Assignment = where to enforce and with what parameters. Initiative = related policy collection. Deny, Audit and modify/remediation do different things.'],
+['Tags','Editable key/value metadata for costs, filtering and script targeting; do not inherit automatically.'],
+['Locks and moves','Delete vs Read-only lock; moves validate eligibility, temporarily protect operations, usually keep workloads available and change IDs where RG/subscription segment changes.'],
+['Cost tools','Pricing Calculator estimates costs; TCO Calculator compares on-prem vs Azure; Cost Management reports and budgets; Advisor gives optimization recommendations; alert thresholds are not automatic spending caps.'],
+['Management group rules','Hierarchical management of subscriptions with policy/RBAC inheritance; root is special and high privilege, the course describes six nested levels and temporary root-level privilege elevation when needed.'],
+['Source caution','This workbook follows the uploaded 2026 transcript, including the lecturer’s wording. Product portals and offer names can change; live Microsoft documentation should be checked before production changes.']
+],steps:['This is a consolidated exam review: no new separate resource creation.'],traps:['Exam questions often use true facts about the wrong Azure feature: a tag is not a policy; an RG is not a subscription; a lock is not a permission; Bicep is not ARM itself.'],diagram:'mg'}
+];
+
+const QUESTIONS=[];
+function q(n,p,opts,right,lesson){QUESTIONS.push({n,p,opts,right,lesson:lesson||n})}
+// Each option includes an explanation. Feedback is provided even for a wrong answer.
+q(1,'What is the main goal of the AZ-104 course segment?',[
+['Learn how to administer Azure resources, identities and governance','Correct. This is the Azure Administrator context of the uploaded lectures.'],
+['Learn only how to write JavaScript','JavaScript is not the focus; these lessons cover Azure management and governance.'],
+['Become an on-premises hardware installer','Cloud compute and administration, not physical hardware assembly, is the goal.'],
+['Only prepare for AZ-900 fundamentals','AZ-900 familiarity is useful background, but the course targets AZ-104.']],0);
+q(1,'Which four questions most usefully frame an Azure operation?',[
+['What color is the Portal?','A cosmetic choice does not determine deployment and authorization.'],
+['What resource, what scope, who is authorized, and through which tool?','Correct. These map to the foundational concepts of the course.'],
+['What is the VM password and who knows it?','Credentials alone do not describe what resource or management scope is involved.'],
+['What is the longest possible JSON template?','Length of a template is not the core administrative question.']],1);
+q(2,'Where is an Azure VM logically organized?',[
+['Directly inside a tag','Tags are labels, not the required resource container.'],
+['Inside a resource group, which belongs to a subscription','Correct. Resources → RG → subscription is the key structure.'],
+['Only inside a management group','Management groups organize subscriptions, not individual VMs directly.'],
+['Only inside Cloud Shell','Cloud Shell is an execution environment, not a container for VMs.']],1);
+q(2,'Azure Resource Manager (ARM) is best described as:',[
+['A physical network cable','Azure networking resources are not the ARM management layer.'],
+['A JSON file containing one VNet','That would be an ARM template, not ARM the service.'],
+['The Azure management/orchestration layer that processes resource requests','Correct. ARM coordinates operations through provider APIs.'],
+['An external identity directory unrelated to Azure','Entra ID manages identity; ARM manages resources.']],2);
+q(2,'Which resource provider would handle an Azure storage operation?',[
+['Microsoft.Storage','Correct. ARM routes storage operations to its storage resource provider.'],
+['Microsoft.Compute','Compute is for VM/compute resource types, not storage accounts.'],
+['Microsoft.Network','Network handles VNet, NIC and networking types.'],
+['Microsoft.EntraID','Entra ID is identity management; the stated resource provider is Microsoft.Storage.']],0);
+q(2,'Which tenant/subscription relationship is described by the course?',[
+['One subscription can trust any number of tenants simultaneously','The lecture says one tenant relationship per subscription at a time.'],
+['An Entra tenant can be associated with multiple subscriptions','Correct. One tenant can govern many subscriptions.'],
+['One tenant can have only one subscription','Many subscriptions may be associated with one tenant.'],
+['Any authenticated Entra user automatically has Owner rights','Authentication does not imply authorization.']],1);
+q(2,'You open Portal and click Create VM. What handles the request?',[
+['Portal directly changes every physical server without ARM','Portal uses Azure management APIs/ARM rather than bypassing the management layer.'],
+['Resource group executes VM instructions on its own','A resource group is a logical container, not the orchestration engine.'],
+['ARM coordinates and uses the Microsoft.Compute provider','Correct. The compute resource provider implements the resource operation.'],
+['Bicep is always required for Portal operations','You need not hand-write Bicep to create a VM in Portal.']],2);
+q(3,'What can you manage through Azure Portal?',[
+['Only virtual machines','Portal includes storage, networking, identity, governance, billing and more.'],
+['Only subscriptions and invoices','The Portal can create and manage broad Azure resources, not just bills.'],
+['Azure resources and their configurations, plus monitoring and operations','Correct. It is a general browser-based Azure management GUI.'],
+['Only Azure network security settings','Networking is one category among many.']],2);
+q(3,'The Cloud Shell choice of “no storage account required” primarily means:',[
+['The VM will have no OS disk','Cloud Shell storage choice is separate from VM OS storage.'],
+['A temporary shell session without persistent file storage','Correct. Work/files may not survive a later fresh shell session.'],
+['Azure stops billing every resource','This choice does not control costs of other services.'],
+['Cloud Shell cannot run Azure commands','CLI and PowerShell can still run in temporary Cloud Shell.']],1);
+q(3,'Which pairing of technologies is correct?',[
+['Azure Portal = shell; Cloud Shell = VM size','Portal is the GUI and Cloud Shell is a browser terminal.'],
+['Bash/PowerShell = session environments; CLI/Az cmdlets = Azure tools','Correct. The shell hosts commands; management utilities send Azure operations.'],
+['Cloud Shell = storage account only','Cloud Shell is a hosted terminal, though persistent configuration can use storage.'],
+['PowerShell = resource provider','PowerShell is a command environment, not a provider.']],1);
+q(3,'In the first VM Portal demonstration, which action completes the deployment?',[
+['Typing VM1 in a draft form without submitting','Naming alone does not provision a VM.'],
+['Opening a Dashboard tile','Dashboards visualize information, they do not deploy a VM by opening them.'],
+['Review + create, then Create after validation','Correct. The Portal submits the deployment request.'],
+['Selecting Cloud Shell Help','Help does not deploy Azure resources.']],2);
+q(3,'Why did one VM Portal deployment create more than one resource?',[
+['The instructor accidentally launched multiple unrelated VMs','Supporting resources are normal dependencies of a VM deployment.'],
+['Azure intentionally created dependencies such as networking components','Correct. A VM needs associated components, such as a NIC.'],
+['Every VM necessarily creates 10 storage accounts','The number/types depend on configuration, and that statement is false.'],
+['Resource groups automatically duplicate all resources','RGs do not clone resource instances by default.']],1);
+q(4,'Which is Azure CLI syntax?',[
+['New-AzVirtualNetwork -Name demo','That is the PowerShell cmdlet naming style.'],
+['resource network "Microsoft.Network/..." = {}','That resembles a Bicep declaration, not Azure CLI.'],
+['az network vnet create --name demo','Correct. CLI uses az followed by command groups and verbs.'],
+['{"type":"Microsoft.Network/virtualNetworks"}','That is an ARM JSON resource definition fragment.']],2);
+q(4,'Why did the instructor use --query and --output tsv?',[
+['To convert VNet into Windows Server','Query and output format only shape command output.'],
+['To extract an RG name without noisy JSON brackets and quotes','Correct. Script variables need a clean value for RG name.'],
+['To bypass Azure authentication','No; query/output do not change authorization.'],
+['To install PowerShell','CLI output flags do not install PowerShell.']],1);
+q(4,'How is an RG object property accessed in PowerShell?',[
+['$rgps.Location','Correct. The dot selects the Location property of a PowerShell object.'],
+['az group list -Location','That combines CLI command syntax with an unrelated PowerShell-style parameter.'],
+['resourceGroup().location','That is an ARM/Bicep expression rather than PowerShell object syntax.'],
+['"Location": "southcentralus"','That is JSON data syntax, not how you access a PowerShell property.']],0);
+q(4,'Which command did he use to create the second VNet?',[
+['az network vnet create','That was the first VNet with CLI.'],
+['New-AzVirtualNetwork','Correct. The second VNet was deployed from PowerShell.'],
+['az bicep decompile','That converts JSON to Bicep, not a VNet creation command.'],
+['Get-AzResourceGroup','That retrieves RG information; it does not create a VNet.']],1);
+q(4,'In Bash, what does storing rgcli=$(...) do?',[
+['Creates an Azure resource called rgcli','A shell variable is local data, not an Azure resource.'],
+['Creates a new subscription','A variable assignment cannot create a subscription.'],
+['Stores the output of a command in a local shell variable','Correct. The script can reuse that value.'],
+['Makes all Azure regions equal','A variable does not affect resource regions.']],2);
+q(5,'What makes ARM JSON “declarative”?',[
+['You specify desired resources and settings rather than each manual click','Correct. ARM coordinates how to reach the specified state.'],
+['It can only be used once','ARM templates are designed for repeatable deployments.'],
+['It uses New-Az cmdlets in every line','That is PowerShell syntax, not JSON declarative template structure.'],
+['It works without ARM at all','ARM is the deployment management service.']],0);
+q(5,'Which three top-level template sections are mandatory in the lecture?',[
+['parameters, variables, outputs','Those sections are useful, but optional.'],
+['$schema, contentVersion, resources','Correct. These are the required sections named in the course.'],
+['functions, outputs, tags','Not the mandatory trio for ARM JSON templates.'],
+['location, vmSize, adminPassword','Resource-specific values, not the three mandatory template sections.']],1);
+q(5,'What is the best use for a parameter?',[
+['A value supplied at deployment time, such as VM name','Correct. It lets one template work for dev/test/prod with different inputs.'],
+['Only storing internal values no user can change','That describes the usual purpose of a variable.'],
+['Specifying the schema’s validation rules','That is the role of $schema.'],
+['Holding a resource provider binary','Parameters are deployment-time values, not provider code.']],0);
+q(5,'What is an ARM template output for?',[
+['Returning values such as an ID to a later script or CI/CD pipeline','Correct. Outputs expose useful deployment results.'],
+['Creating a management group automatically','Outputs report values; resource declarations/appropriate scope deploy things.'],
+['Replacing every parameter','Inputs and outputs serve different roles.'],
+['Preventing subscription billing','Outputs do not govern costs.']],0);
+q(5,'If a NIC depends on a subnet, how does ARM determine needed order?',[
+['Always by the lexical order of resource names','Names do not determine dependency ordering.'],
+['Always by the order in the resources array','Array position is not a safe guarantee of deployment order.'],
+['From dependencies and resource references','Correct. Explicit dependsOn or certain references establish dependencies.'],
+['ARM never tracks dependencies','ARM coordinates resource dependencies during deployment.']],2);
+q(6,'When he clicked Add resource → VNet in the editor, what happened immediately?',[
+['A running VNet was deployed immediately','That did not happen yet; deployment was later.'],
+['A VNet JSON definition was generated inside the template','Correct. The editor built the blueprint, not a running resource.'],
+['A new Azure tenant was created','Tenants are unrelated to adding a VNet definition.'],
+['The VNet was permanently deleted','Adding a definition is not deletion.']],1);
+q(6,'The “existing VNet” selected while adding VM1 was:',[
+['A VNet already defined earlier in the same template','Correct. Defined in template does not necessarily mean deployed in Azure.'],
+['Always a VNet already running in another Azure subscription','The instructor specifically reused the VNet he added to this template.'],
+['A VM operating-system disk','A VNet is networking, not storage.'],
+['A billing resource group','A VNet and an RG are different resource types.']],0);
+q(6,'Why did the template include a NIC?',[
+['A NIC connects the VM to the VNet subnet','Correct. It provides the network interface attached to a subnet.'],
+['The NIC stores the Windows operating system','The OS disk stores the operating system, not NIC.'],
+['A NIC is an Entra tenant','It is a network resource, not an identity directory.'],
+['Every storage account requires its own VM NIC','A storage account does not require a VM NIC.']],0);
+q(6,'When did Azure actually create his ARM-template resources?',[
+['When the editor generated variables','Variables are part of the JSON description.'],
+['When he viewed the Deployments page','Viewing an existing deployment does not create the new one.'],
+['After he saved, filled parameters and clicked Review + create → Create','Correct. That submits the actual deployment.'],
+['When he chose an OS type in an unsaved draft','Selecting a value is not deployment.']],2);
+q(6,'Which distinction about storage is important?',[
+['Every modern VM needs a separate Azure Storage Account','Modern VMs generally use managed disks; an extra storage account is not universally required.'],
+['A storage account is always identical to the VM OS disk','These are distinct concepts.'],
+['The template demo added storage, but extra storage is not universally required for VMs','Correct. The demo included a storage account as an additional resource.'],
+['NICs are a special type of storage account','NICs are network interfaces.']],2);
+q(7,'Where does Bicep belong in the deployment flow?',[
+['Bicep → ARM JSON → ARM service → resource providers','Correct. Bicep compiles to an ARM JSON representation.'],
+['Bicep → provider without Azure Resource Manager','Bicep does not bypass ARM.'],
+['Bicep is a Windows Server operating system','Bicep is an IaC language.'],
+['Bicep → Entra tenant, with no infrastructure deployment','Bicep describes Azure deployments, not solely identity directory creation.']],0);
+q(7,'Which snippet unmistakably resembles Bicep?',[
+['New-AzVM -Name vm1','PowerShell cmdlet syntax.'],
+['az vm create --name vm1','Azure CLI command syntax.'],
+['resource app \'Microsoft.Web/sites@2022-09-01\' = { }','Correct. Bicep uses resource, symbolic names, @API version and =.'],
+['{"apiVersion":"2022-09-01","type":"Microsoft.Web/sites"}','ARM JSON snippet.']],2);
+q(7,'Why did the first Bicep web app deployment fail?',[
+['The Bicep language cannot deploy web apps','Bicep supports Web Apps.'],
+['The name AwesomeApp was already in use and required a unique web-app name','Correct. The hardcoded name conflicted.'],
+['Azure forbids parameters','Parameters are supported in Bicep.'],
+['The RG had no file system','This was not the reported cause.']],1);
+q(7,'What fixed the duplicate web app name issue?',[
+['Use a required webAppName string parameter and supply a unique value','Correct. This makes the template reusable while satisfying unique naming.'],
+['Change the subscription name only','That does not necessarily change the globally constrained app name.'],
+['Remove the App Service Plan','The web app still needs its hosting plan in this example.'],
+['Switch from Bicep to Bash syntax inside the file','Bicep can deploy correctly; the issue was the chosen name.']],0);
+q(7,'What does appServicePlan.id mean in a Bicep web-app definition?',[
+['Reference the deployed plan resource ID by its symbolic name','Correct. Bicep allows a resource to refer to another’s properties.'],
+['Make an App Service Plan into a VM','It is an ID reference, not conversion.'],
+['Set the Azure tenant ID','This property is a resource ID for the plan, not a tenant.'],
+['Call a PowerShell function','The dot-access is Bicep symbolic-resource property syntax here.']],0);
+q(8,'Which direction does az bicep build perform?',[
+['ARM JSON → Bicep','That is decompile.'],
+['Bicep → ARM JSON','Correct. Build compiles the Bicep source to JSON.'],
+['VNet → PowerShell','Build does not translate a network to cmdlets.'],
+['Azure resources → resource group','Build does not move running resources.']],1);
+q(8,'Which direction does az bicep decompile perform?',[
+['Bicep → ARM JSON','That is build.'],
+['Bicep → running VM without ARM','Bicep deployment still uses ARM.'],
+['ARM JSON → Bicep (best effort)','Correct. Generated Bicep may need review and fixes.'],
+['Azure CLI → Powershell','Decompile targets ARM JSON, not command languages.']],2);
+q(8,'Which file chain matches his demo?',[
+['test.json → deploy.bicep → test.bicep','He started from deploy.bicep, not test.json.'],
+['deploy.bicep → test.json → test.bicep','Correct. Build then decompile.'],
+['deploy.json → test.ps1 → deploy.sh','Those were not the documented files.'],
+['VM1 → resourceGroup → subscriptions.json','That is not his conversion workflow.']],1);
+q(8,'What is the concern with automated decompilation?',[
+['It guarantees a perfect refactoring for every complex template','The lecturer cautions it is best effort and may need fixes.'],
+['It automatically deletes the original JSON','Decompile does not inherently delete the source JSON.'],
+['It is a best-effort conversion that must be reviewed','Correct. Syntax and semantics should be checked after conversion.'],
+['It bypasses authorization rules','File conversion does not grant permissions.']],2);
+q(8,'What actually deployed the decompiled file?',[
+['az deployment group create with --template-file test.bicep','Correct. Build/decompile create files; group deployment creates resources.'],
+['ls','ls only lists local files.'],
+['cat test.json','cat prints file contents; does not deploy.'],
+['az bicep decompile by itself','Decompile converts code but does not provision resources.']],0);
+q(9,'Which of these pairs is correctly matched?',[
+['PowerShell → az network vnet create','This is Azure CLI syntax.'],
+['Bicep → "apiVersion" quoted JSON keys only','Those identify JSON; Bicep uses its own syntax.'],
+['Azure CLI → az; Azure PowerShell → New-Az...','Correct. The distinctive prefixes help identify commands.'],
+['ARM template → Enter-AzVM','ARM templates use JSON, not PowerShell cmdlets.']],2);
+q(9,'Which statement about ARM and Bicep is correct?',[
+['Both are declarative IaC, but Bicep compiles into ARM JSON','Correct. Same deployment intent expressed in different formats.'],
+['Bicep is imperative while ARM JSON is declarative','Bicep is declarative as well.'],
+['Both source files are JSON','Bicep has its own language/syntax.'],
+['Bicep removes the need for Resource Manager','ARM still handles deployment.']],0);
+q(9,'Which element is optional in an ARM JSON template?',[
+['resources','The course lists resources as required.'],
+['$schema','The course lists schema as required.'],
+['contentVersion','The course lists contentVersion as required.'],
+['outputs','Correct. Outputs are optional result values.']],3);
+q(9,'An Azure Portal action and an Azure CLI command generally have what in common?',[
+['They both manage resources through ARM management APIs','Correct. They differ in interface but reach Azure’s management plane.'],
+['They can operate only on virtual networks','Both cover many Azure resource types.'],
+['Neither supports resource changes','Both can create and update resources.'],
+['They both require a handwritten Bicep file','Direct CLI/Portal operations need not involve a handwritten Bicep file.']],0);
+q(10,'What is an Azure subscription primarily used for in these lessons?',[
+['A dedicated private subnet','That is a networking concept.'],
+['A billing, quota, deployment and governance scope','Correct. It is more than just an invoice.'],
+['A replacement for the Entra tenant','Tenant is identity boundary; subscription is Azure resource/billing scope.'],
+['A key-value label','That is a tag.']],1);
+q(10,'Which Azure subscription offer refers to a cloud solution partner?',[
+['Azure in CSP','Correct. CSP stands for Cloud Solution Provider.'],
+['Pay-As-You-Go','This describes usage-based billing.'],
+['Usage + quotas','This is a management panel, not a partner offer.'],
+['Azure Advisor','Advisor provides recommendations, not subscription enrollment partner.']],0);
+q(10,'Why might engineering and marketing use different subscriptions?',[
+['To separate billing and apply governance at team-specific scopes','Correct. The lecture uses this example.'],
+['To ensure virtual machines in each team cannot ever communicate','Subscription separation alone is not a guaranteed network firewall.'],
+['Because one subscription can contain only one RG','A subscription can contain many RGs.'],
+['Because tenants cannot manage two subscriptions','A tenant can have multiple subscriptions.']],0);
+q(10,'What does Usage + quotas show?',[
+['Unlimited resources at every size','Azure services have quotas and limits.'],
+['Limits and usage, some of which can be raised by request','Correct. Cloud resources have finite quota allocations.'],
+['Only a list of Entra users','Quotas are about service limits, not user directory list.'],
+['The storage account’s blob contents','Blob contents are elsewhere.']],1);
+q(10,'Which is usage-based rather than the up-front agreement example?',[
+['Pay-As-You-Go','Correct. The course contrasts usage-based payment with enterprise commitment.'],
+['Enterprise Agreement example','The lecture describes annual planned commitment here.'],
+['Management Group','This is governance hierarchy, not a billing offer.'],
+['Azure Policy','Policy is governance, not an offer.']],0);
+q(11,'Can a resource group contain another resource group?',[
+['Yes, indefinitely','RGs do not support nested RG hierarchy.'],
+['Yes, if both are free','Cost does not change nesting support.'],
+['No, resource groups are a single logical grouping layer','Correct. Management groups, not nested RGs, organize subscriptions hierarchically.'],
+['Only under a NIC','NIC is a network resource, not a resource-group container.']],2);
+q(11,'If an RG is located in East US, where may its VM be?',[
+['Only East US','Member resources can reside in other Azure regions.'],
+['Any supported region chosen for that VM','Correct. RG metadata location is not a restriction on every member resource.'],
+['Only the Entra tenant region','Tenant identity location does not force VM region.'],
+['A resource group cannot have VMs','RGs commonly contain VMs.']],1);
+q(11,'Can a VM be in two RGs simultaneously?',[
+['Yes, by setting two Environment tags','Tags do not change RG membership.'],
+['No; one RG at a time, but supported moves are possible','Correct. You can reorganize membership via a move.'],
+['Yes, if both RGs share a subscription','Being in one subscription does not enable two simultaneous RG memberships.'],
+['Only with Azure CLI','The management tool does not change the one-RG rule.']],1);
+q(11,'Do RG boundaries by themselves prevent traffic between two VMs?',[
+['Yes, they work as network security groups','RG is not a network security boundary.'],
+['No; network topology and security controls determine communication','Correct. RG is an administrative boundary.'],
+['Yes, but only if tags differ','Tags do not block traffic.'],
+['No network traffic exists in Azure','Azure supports networking.']],1);
+q(11,'Which is a common recommended RG grouping strategy?',[
+['Group resources sharing an application lifecycle','Correct. Created/changed/deleted together is a practical organizing rule.'],
+['Put every Azure resource in one giant RG forever','That is not a recommended default; it loses lifecycle organization.'],
+['Make a child RG for every VM','RGs cannot nest.'],
+['Use RGs to replace private VNets','RGs and VNets serve different purposes.']],0);
+q(12,'Which tool estimates the cost of planned Azure resources before deployment?',[
+['Azure Pricing Calculator','Correct. Configure service, tier, instance count and other settings for estimates.'],
+['Azure Policy','Policy governs compliance, not pricing calculations.'],
+['Entra Conditional Access','That manages authentication conditions.'],
+['Resource locks','Locks prevent changes/deletion, not price estimation.']],0);
+q(12,'What does the Total Cost of Ownership (TCO) Calculator compare?',[
+['Two JSON schema versions','That is unrelated to cost of ownership.'],
+['Costs of on-premises workloads vs Azure migration','Correct. It uses workload and operating assumptions to estimate savings.'],
+['Resource ID before vs after RG move','That is a move concern, not TCO.'],
+['CLI versus PowerShell syntax','A syntax choice is not a cost-of-ownership model.']],1);
+q(12,'What does creating a $150 budget with a 75% alert do?',[
+['Guarantee the subscription can never exceed $150','Budget alerts do not automatically stop spending.'],
+['Immediately delete all resources at $112.50','Budget notifications are not delete operations.'],
+['Provide a threshold-based notification about spending','Correct. The alert can warn when the budget threshold is reached.'],
+['Change the currency exchange rate','Budget settings do not set FX rates.']],2);
+q(12,'Which problem is “overprovisioning”?',[
+['A VM is much larger/more costly than the workload needs','Correct. Selecting too much capacity wastes spending.'],
+['A VM has no resource group','RG membership is a structural requirement, not the cost-risk definition.'],
+['Your subscription has no tags','That is a metadata/organization issue.'],
+['Using too few services to meet demand','That is insufficient capacity, not overprovisioning.']],0);
+q(12,'What is Azure Advisor used for in this lesson?',[
+['Converting JSON to Bicep','That is the Bicep decompile tool.'],
+['Cost and other optimization recommendations','Correct. Advisor analyzes Azure configuration and suggests improvements.'],
+['Assigning new tenants to subscriptions','Not its role.'],
+['Stopping all services automatically when you view it','Viewing recommendations does not execute shutdown.']],1);
+q(12,'Which part of cost governance describes a warning at 75% of monthly spend?',[
+['A measurable indicator/threshold','Correct. An indicator operationalizes the budget metric.'],
+['A VNet address prefix','Network address space is unrelated to budget monitoring.'],
+['A Bicep resource symbolic name','That is an IaC identifier.'],
+['A read-only resource lock','Locks restrict modifications, not calculate budget percentage.']],0);
+q(13,'What is an Azure tag?',[
+['A subnet range','A subnet uses address ranges, not key-value labels.'],
+['A key-value metadata label like Environment:Prod','Correct. Tags aid organization, filtering, billing attribution and automation.'],
+['A tenant trust relationship','That links subscription to Entra tenant.'],
+['An RBAC role assignment','Roles grant permissions; tags label resources.']],1);
+q(13,'If you tag a resource group Environment=Prod, what happens to the resources inside by default?',[
+['Every VM inherits the tag instantly','Tags do not inherit by default.'],
+['Only storage accounts inherit it','No blanket automatic inheritance for just storage accounts.'],
+['They do not automatically inherit the RG tag','Correct. Apply separately or use policy/automation.'],
+['All resources move to a Prod subscription','A tag is metadata, not a move instruction.']],2);
+q(13,'Why might tags be better than renaming a resource group?',[
+['RG names cannot simply be renamed, but tags are editable','Correct. Tags add flexible dimensions without moving the RG.'],
+['Tags automatically grant Reader role','Tags do not grant RBAC permissions.'],
+['Tags always stop VMs over weekends automatically','You need automation/scripts to act on tags.'],
+['Tags change a VM region','Tags do not migrate resources.']],0);
+q(13,'Which demonstration proved tags do not inherit?',[
+['Adding Environment:Prod to RG and seeing it missing on child Application Insights','Correct. The child retained its own Department and Owner tags.'],
+['Creating an Azure VM without Windows','The demo concerns tags, not OS choice.'],
+['Building test.json with Bicep','That is IaC conversion, unrelated to tag inheritance.'],
+['Setting a quota request','Quota changes do not test tag inheritance.']],0);
+q(13,'What can an automation script do with tags?',[
+['Select Dev servers but exempt a specific owner/team','Correct. Multi-dimensional tag filters can target tasks.'],
+['Turn tags into virtual networks without code','Tags are labels; automation must explicitly perform operations.'],
+['Prevent every resource group from being deleted','Tags alone do not enforce deletion restrictions.'],
+['Bypass Azure RBAC','Scripts still require authorization.']],0);
+q(14,'Which lock permits modification but blocks deletion?',[
+['Read-only','Read-only also blocks modification.'],
+['CanNotDelete/Delete','Correct. The resource can still be read/changed, but not deleted.'],
+['Environment:Prod','A tag is not a lock.'],
+['Azure Policy Audit','Audit reports compliance rather than creating a lock.']],1);
+q(14,'Which lock blocks both changes and deletion?',[
+['CanNotDelete','CanNotDelete allows many modifications.'],
+['Cost budget','Budgets are not resource modification locks.'],
+['Read-only','Correct. Read-only is more restrictive.'],
+['A resource group tag','Tags label resources.']],2);
+q(14,'What happens to VM region if moved to an RG whose metadata location differs?',[
+['The VM automatically migrates to the new RG’s region','RG moves do not migrate VM compute across regions.'],
+['The VM’s region stays the same','Correct. RG location and VM location are separate.'],
+['The VM becomes a management group','Moves do not change resource type.'],
+['The VM is automatically removed from its tenant','An RG change does not inherently disconnect the tenant.']],1);
+q(14,'What typically changes when a resource moves RG or subscription?',[
+['The resource ID path','Correct. Resource ID includes subscription and RG identifiers.'],
+['Every user password','A move does not inherently reset user passwords.'],
+['The JSON language into PowerShell','Move operations are not language conversions.'],
+['All application data is deleted','Supported moves are designed to preserve resource operations/data.']],0);
+q(14,'During a supported move, which statement is closest to the course?',[
+['Resources are temporarily locked against changes but generally keep serving requests','Correct. Validation occurs first; dependent resources and IDs need attention.'],
+['Everything is unconditionally deleted before recreation','That does not describe a normal supported move.'],
+['No validation is necessary for any resource type','Some resource types cannot be moved, so validation matters.'],
+['The Entra tenant must always change','Standard cross-subscription moves typically require the same tenant.']],0);
+q(14,'Why did deletion of the demo load balancer fail?',[
+['The instructor applied a Delete lock to that resource','Correct. The locked scope rejected the delete operation.'],
+['The lock prevented viewing the resource','A Delete lock still allows viewing.'],
+['Load balancers can never be deleted','They can be deleted without blocking constraints.'],
+['The budget was below $150','Budget state does not explain the locked deletion failure.']],0);
+q(15,'What is the difference between policy definition and assignment?',[
+['Definition tells what to evaluate; assignment selects scope and settings','Correct. You need an assignment to apply a rule to resources.'],
+['Assignment defines user password; definition is VNet','These are unrelated concepts.'],
+['Definition is a resource group, assignment is a subscription','Policy definition and assignment are governance artifacts, not those containers.'],
+['There is no difference','They have distinct roles.']],0);
+q(15,'What is an Azure Policy initiative?',[
+['A collection of related policy definitions','Correct. Group policies toward a common compliance goal.'],
+['A JSON template compiler','Bicep build is a compiler.'],
+['A resource-group alias','That is not what an initiative means.'],
+['A subscription invoice','Invoices track billing.']],0);
+q(15,'If the desired effect is only to report violations, which effect fits?',[
+['Deny','Deny blocks noncompliant requests.'],
+['Audit','Correct. Audit records noncompliance instead of blocking by itself.'],
+['Read-only lock','Read-only is a management lock, not policy Audit.'],
+['Move','Move is a resource relocation action.']],1);
+q(15,'What did the allowed-SKUs policy demonstration block?',[
+['All Standard storage accounts','Standard SKUs were explicitly allowed in the demo.'],
+['A Premium LRS storage-account creation','Correct. Premium was absent from the allowed Standard list, so policy denied it.'],
+['Every existing virtual network','The policy targeted storage account SKUs, not VNets.'],
+['All Cloud Shell sessions','This policy did not target Cloud Shell itself.']],1);
+q(15,'What is the purpose of policy remediation with a managed identity?',[
+['Allow the policy mechanism to modify certain noncompliant resources','Correct. Some modify/deploy effects need an identity with permissions.'],
+['Automatically authorize all anonymous users','Managed identities do not make resources public.'],
+['Only produce a pricing estimate','That is Pricing Calculator.'],
+['Replace Azure RBAC everywhere','Remediation identities still require proper permissions.']],0);
+q(15,'Which choice is the best example of a policy assignment scope?',[
+['A specific Azure subscription','Correct. The instructor selected whole-subscription scope.'],
+['The textual name of a JSON variable only','A local JSON variable is not a policy scope.'],
+['A pricing calculator screenshot','That is not an Azure governance scope.'],
+['Only a shell script filename','A filename is not a resource scope.']],0);
+q(16,'What is the main purpose of a management group?',[
+['Organize subscriptions and apply governance across them','Correct. MGs provide hierarchical scope for RBAC and Policy.'],
+['Act as the physical network connecting two VMs','That is a networking task.'],
+['Replace all subscription billing','Management groups do not eliminate subscriptions.'],
+['Store VM OS disks','That is compute/storage infrastructure, not MG.']],0);
+q(16,'Which management-group hierarchy is valid conceptually?',[
+['Tenant Root → MG1 → MG2 → Subscription → RG → VM','Correct. Policies/RBAC can be inherited down the tree.'],
+['VM → Resource Group → Tenant Root → Subscription','That reverses the hierarchy.'],
+['Resource Group → Nested Resource Group → Subscription','RG nesting is unsupported.'],
+['Subscription → Tenant Root MG → VM → MG2','A subscription is below the MG hierarchy, not above root.']],0);
+q(16,'Which management group field can be changed after creation?',[
+['Group ID','The demo says group ID cannot be changed afterward.'],
+['Display name','Correct. Display name is editable.'],
+['Tenant root group identifier at will','Root is special and not created/renamed like a normal MG.'],
+['VM resource ID via name edit','That is not a management-group field.']],1);
+q(16,'What happens to a policy assigned at a parent management group?',[
+['It can apply to children through hierarchical scope','Correct. Governance flows down the MG tree.'],
+['It becomes a NIC','Policy is not a networking resource.'],
+['It only affects the parent title text','Assignments can apply to child scopes.'],
+['It automatically changes each VM to the parent RG region','Policy inheritance does not inherently migrate resources.']],0);
+q(16,'What is special about root management group access?',[
+['Everyone automatically has full root owner access','The course warns that powerful root access is not granted by default.'],
+['It is a high-privilege scope and may require temporary elevation by a tenant global admin','Correct. Elevate only when needed and remove afterward.'],
+['It can be moved into a child RG','Root MG cannot be nested in an RG.'],
+['It is a storage account created by Cloud Shell','It is the top management hierarchy object.']],1);
+q(16,'How many nested management-group levels does the instructor teach below root?',[
+['One only','The course explicitly supports deeper nesting.'],
+['Six','Correct. The transcript describes support for six levels in the hierarchy.'],
+['Unlimited','The hierarchy has a documented depth limit.'],
+['Zero','Management groups may have child management groups.']],1);
+q(17,'Which is the accurate pairing of governance mechanisms?',[
+['Tag = permission; Lock = cost forecast; Policy = VM disk','Those mix unrelated purposes.'],
+['Tag = metadata; Lock = prevent change/deletion; Policy = compliance rules','Correct. Three different tools addressing different goals.'],
+['Tag = firewall; Lock = subnet; Policy = terminal','These are not valid definitions.'],
+['Tag = subscription; Lock = provider; Policy = Bicep','They are distinct Azure concepts.']],1);
+q(17,'Which best describes Resource Group cost?',[
+['RG container is free, but the contained resources may incur charges','Correct. Bills come from underlying services, not merely making an RG.'],
+['Each empty RG costs the price of a VM','An empty RG has no VM compute charge.'],
+['RG is always the entire subscription invoice','The subscription is the billing unit.'],
+['Tags entirely prevent billing for RG resources','Tags cannot stop compute/storage billing.']],0);
+q(17,'Which solution helps recognize a noncompliant Storage SKU?',[
+['Azure Policy allowed-SKUs definition and assignment','Correct. Evaluate SKU and apply deny/audit effects at scope.'],
+['Change a VM administrator username','Credentials do not govern storage SKUs.'],
+['Switch Cloud Shell to Bash','Shell choice does not enforce SKU policy.'],
+['Add a Notes tag only','A tag labels resources but does not by itself enforce allowed SKU rules.']],0);
+q(17,'A team wants weekly cost-saving suggestions and a separate alert at 75% of spend. Choose the pair.',[
+['Azure Advisor recommendation digest + Azure Cost Management budget alert','Correct. The first suggests optimizations; the second warns on threshold.'],
+['Bicep decompile + resource group rename','Neither is a cost recommendation/alert tool.'],
+['NIC + subnet','Those provide networking, not spending notifications.'],
+['Tenant root + Azure Policy Audit only','These do not by themselves implement the described two functions.']],0);
+q(17,'Which pair best describes the management scope order?',[
+['Resource → management group → subscription → RG','The RG is below the subscription, and MGs are above subscriptions.'],
+['Management group → subscription → RG → resource','Correct. Hierarchy enables scope and inheritance.'],
+['Subscription → RG → management group → resource','Management groups are above subscriptions.'],
+['Tag → RG → ARM → VNet','Tag and ARM are not levels of this containment hierarchy.']],1);
+// Integrative mini-cases, attributed to cross-lesson review rather than an additional lecture.
+q(17,'Scenario: you want to reuse one template for dev and prod with different VM names. Which feature?',[
+['Parameters','Correct. Required/default parameters let deployment operators supply environment-specific values.'],
+['Resource provider','Providers execute operations, but do not substitute for deployment inputs.'],
+['Read-only lock','Locks restrict changes rather than parameterize a deployment.'],
+['Azure Advisor','Advisor recommends optimizations, not input substitution.']],0);
+q(17,'Scenario: you need to stop accidental deletion of a production storage account, yet allow configuration updates. Choose:',[
+['Read-only lock','This also prevents modifying settings.'],
+['CanNotDelete/Delete lock','Correct. Deletion is blocked while modifications generally remain allowed.'],
+['Environment:Prod tag','Tags alone have no enforcement effect.'],
+['Pricing Calculator','Calculator only estimates cost.']],1);
+q(17,'Scenario: user has access to tenant but cannot administer a subscription. What is missing?',[
+['An appropriate Azure RBAC role assignment','Correct. Sign-in and tenant association do not automatically confer management rights.'],
+['A different CSS theme','Portal theme does not grant privileges.'],
+['A resource tag on the user','Tags do not assign subscription roles.'],
+['A larger storage SKU','Storage SKU does not grant authorization.']],0);
+q(17,'Scenario: moving a resource into another RG within the same region. Which fact matters?',[
+['It changes Azure region automatically','RG membership alone does not migrate region.'],
+['Its resource ID changes and references might need updates','Correct. RG segment is part of the resource ID path.'],
+['It becomes an Entra guest user','Moving a resource does not convert resource type.'],
+['It can belong to both RGs indefinitely','One resource has one RG at a time.']],1);
+q(17,'Scenario: an Azure course quiz says both Bicep and ARM templates use JSON source code. How should you judge it?',[
+['True; both must be authored as JSON','Bicep is not JSON source syntax.'],
+['False; ARM template is JSON, while Bicep is a distinct declarative language','Correct. Bicep compiles to JSON but source remains Bicep.'],
+['True because CLI is always JSON','CLI is a command syntax, independent of the source language distinction.'],
+['False because ARM cannot deploy anything','ARM is precisely Azure’s management/deployment layer.']],1);
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
+let lesson=2,view='notes',idx=0,scope='all',resultMode='normal';let quizPool=[];
+const key='az104_course_workbook_l1to17_answers_v1';let attempts={};try{attempts=JSON.parse(localStorage.getItem(key)||'{}')}catch(e){attempts={}}
+const save=()=>{try{localStorage.setItem(key,JSON.stringify(attempts))}catch(e){}}
+function node(t,sub='',kind=''){return `<div class="node ${kind}"><strong>${t}</strong>${sub?`<small>${sub}</small>`:''}</div>`}
+function arrow(){return '<div class="arrow" aria-hidden="true">→</div>'}
+function seq(nodes){return `<div class="flowrow">${nodes.map((a,i)=>(i?arrow():'')+node(...a)).join('')}</div>`}
+function diagram(k){let title='',d='';
+if(k==='hierarchy'){title='How Azure is organized';d=`<div class="scopebox"><strong>🏢 Entra ID tenant: users & authentication</strong><p>Trust relationship with one or more subscriptions; permissions are separately assigned.</p><div class="scopebox"><strong>💳 Subscription: billing, quotas, deployments, security scope</strong><div class="scopebox"><strong>📂 Resource Group: logical container</strong><div class="smallbox">🖥 VM &nbsp;·&nbsp; 🌐 Virtual Network &nbsp;·&nbsp; 🗄 Storage Account</div></div></div></div>`}
+else if(k==='flow'){title='How a management request travels';d=seq([['👤 User','Authenticated & authorized'],['🖱 Portal / CLI / PowerShell','Management client'],['⚙ Azure Resource Manager','API + orchestration','dark'],['🔌 Resource provider','Compute / Network / Storage'],['☁ Azure resource','VM, VNet, storage','teal']]);}
+else if(k==='vm'){title='What a VM deployment includes';d=`<div class="scopebox"><strong>📂 Resource group</strong><p>Administrative grouping, not itself a virtual network</p><div class="scopebox"><strong>🌐 VNet</strong><p>Contains a subnet with private address space</p><div class="scopebox"><strong>Subnet</strong><div class="flowrow">${node('🔌 NIC','Network interface')}${arrow()}${node('🖥 VM1','Windows Server','teal')}</div></div></div><div class="smallbox">🗄 Storage account: additional, separately deployed resource; not the same as the OS managed disk.</div></div>`;}
+else if(k==='arm'){title='From template to deployed resources';d=seq([['📄 ARM JSON template','Definition only'],['📥 Submit deployment','RG + parameters'],['⚙ ARM','Validate, authorize & orchestrate','dark'],['🔌 Providers','Dependencies'],['☁ Live resources','Deployed/updated','teal']]);}
+else if(k==='bicep'){title='Bicep translation and deployment';d=seq([['📘 deploy.bicep','Human-friendly source'],['🔁 Build','Compiles'],['📄 ARM JSON','Generated representation'],['⚙ ARM','Manages deployment','dark'],['☁ Resources','Plan + Web App','teal']]);}
+else if(k==='tools'){title='Four routes to the same Azure management layer';d=`<div class="flowrow">${node('🖱 Portal','Click UI')}${node('⌨ Azure CLI','az ...')}${node('⌨ PowerShell','New-Az...')}${node('📄 ARM / Bicep','IaC')}</div><div style="text-align:center;font-size:24px;color:#668da9;margin:6px">↓</div>${node('Azure Resource Manager','Management plane and resource providers','dark')}`;}
+else if(k==='cost'){title='Cost management cycle';d=seq([['🧮 Pricing Calculator','Estimate before'],['📊 Cost Analysis','Measure actual spend'],['🚨 Budget alerts','Warn at threshold','gold'],['💡 Azure Advisor','Improve efficiency','teal']]);}
+else if(k==='tags'){title='Tags do not inherit by default';d=`<div class="scopebox"><strong>📂 Resource Group with tag Environment=Prod</strong><div class="scopebox"><strong>🖥 Child VM: no inherited Environment tag by default</strong><p>To label it too, assign the tag to the VM or use policy/automation.</p></div></div>`;}
+else if(k==='locks'){title='Lock behavior at a glance';d=`<div class="flowrow">${node('🔓 No lock','Read / change / delete')}${node('🔒 Delete lock','Read & change; no delete','gold')}${node('🛑 Read-only lock','Read; no change/delete','teal')}</div>`;}
+else if(k==='policy'){title='Policy is a rule applied at a scope';d=seq([['📜 Definition','Rule + effect'],['🎯 Assignment','Scope + parameters'],['🔎 Evaluate','Check SKU / tag / size'],['🚦 Effect','Deny, Audit, modify','teal']]);}
+else if(k==='mg'){title='Management group hierarchy';d=`<div class="scopebox"><strong>🌳 Tenant Root Management Group</strong><div class="scopebox"><strong>🗂 MG1: policy / RBAC assigned here</strong><div class="scopebox"><strong>🗂 MG2</strong><div class="scopebox"><strong>💳 Subscription</strong><div class="smallbox">📂 RG → 🖥 VM and other resources</div></div></div></div></div>`;}
+return `<figure class="diagram" role="img" aria-label="${esc(title)}"><figcaption class="diagramtitle">${title}</figcaption>${d}</figure>`}
+function lessonHTML(L){return `<article class="lessonBlock"><div class="lesson-top"><span class="l-num">LESSON ${L.n} / 17</span><span class="pill">${esc(L.unit)}</span></div><h2 class="lesson-title">${esc(L.title)}</h2><p class="lead">${esc(L.goal)}</p>${diagram(L.diagram)}<h3 class="secthead">Key concepts</h3><div class="concepts">${L.concepts.map((c,i)=>`<div class="concept"><h4>${i+1}. ${esc(c[0])}</h4><p>${c[1]}</p></div>`).join('')}</div>${L.code?`<h3 class="secthead">Code to recognize</h3><pre class="command">${esc(L.code)}</pre><p class="micro">${L.n===4?'These example CLI/PowerShell commands are illustrative; select the correct RG in your own environment.':L.n===7?'Illustrative Bicep syntax; exact deployment depends on provider API and settings.':'Simplified source/example; not all snippets are complete standalone deployable templates.'}</p>`:''}<h3 class="secthead">Demo walkthrough</h3><ol class="demo-list">${L.steps.map(s=>`<li>${s}</li>`).join('')}</ol><div class="gotchas"><strong>Exam traps</strong><ul>${L.traps.map(s=>`<li>${s}</li>`).join('')}</ul></div><div class="lessonfoot"><button class="btn primary" data-startquiz="${L.n}">Quiz me on lesson ${L.n}</button><button class="btn" data-nextlesson="${Math.min(17,L.n+1)}" ${L.n===17?'disabled':''}>Next lesson →</button></div></article>`}
+function setView(v){view=v;for(const b of document.querySelectorAll('[data-view]')){b.classList.toggle('active',b.dataset.view===v);b.setAttribute('aria-selected',String(b.dataset.view===v))}for(const id of ['notes','quiz','map'])$(id).classList.toggle('hidden',id!==v);window.scrollTo({top:0,behavior:'instant'});if(v==='notes')showNotes();if(v==='quiz')showQuiz();if(v==='map')showMap()}
+function showNotes(){const L=LESSONS[lesson-1];$('notes').innerHTML=lessonHTML(L);document.querySelectorAll('.navitem').forEach(b=>b.classList.toggle('active',Number(b.dataset.lesson)===lesson));const act=document.querySelector('.navitem.active');if(act){const nv=act.parentElement;nv.scrollLeft=act.offsetLeft-(nv.clientWidth-act.offsetWidth)/2}}
+function changeLesson(n){lesson=Math.min(17,Math.max(1,n));setView('notes')}
+function selectScope(s){scope=String(s);resultMode='normal';quizPool=scope==='all'?QUESTIONS.map((_,i)=>i):scope==='missed'?QUESTIONS.map((v,i)=>i).filter(i=>attempts[i]&&attempts[i].wrong):QUESTIONS.map((v,i)=>i).filter(i=>QUESTIONS[i].n===Number(scope));idx=0;if(scope==='missed'){for(const k of quizPool)delete attempts[k];save()}showQuiz()}
+function answerAt(qi){return attempts[qi]}
+function answeredCount(){return Object.keys(attempts).filter(k=>Number.isInteger(attempts[k]?.chosen)).length}
+function correctCount(){return Object.keys(attempts).filter(k=>Number.isInteger(attempts[k]?.chosen)&&attempts[k].chosen===QUESTIONS[k]?.right).length}
+function feedback(qi){let a=attempts[qi],Q=QUESTIONS[qi],right=a.chosen===Q.right;return `<div class="feedback ${right?'good':'bad'}" aria-live="polite"><h3>${right?'✓ Correct':'✗ Not quite'}</h3><p><strong>Your choice:</strong> ${esc(Q.opts[a.chosen][0])}</p><p>${esc(Q.opts[a.chosen][1])}</p>${!right?`<p><strong>Correct answer:</strong> ${esc(Q.opts[Q.right][0])}. ${esc(Q.opts[Q.right][1])}</p>`:''}<div class="rationales"><div class="smallcaps">Why each option is right or wrong</div>${Q.opts.map((o,i)=>`<div class="rationale"><strong>${i===Q.right?'✓ Correct':`✕ Not correct`} · ${String.fromCharCode(65+i)}.</strong> ${esc(o[1])}</div>`).join('')}</div></div>`}
+function showQuiz(){if(!quizPool.length&&scope!=='missed')quizPool=QUESTIONS.map((_,i)=>i);let all=quizPool.length;let answered=quizPool.filter(i=>answerAt(i)&&Number.isInteger(answerAt(i).chosen)).length;let right=quizPool.filter(i=>answerAt(i)?.chosen===QUESTIONS[i].right).length;$('quiz').innerHTML=`<div class="quizhead"><div><h2 class="lesson-title">Quiz</h2></div><select id="qscope" class="quizselect" aria-label="Select quiz section"><option value="all" ${scope==='all'?'selected':''}>All lessons (${QUESTIONS.length} questions)</option>${LESSONS.map(L=>`<option value="${L.n}" ${String(L.n)===scope?'selected':''}>Lesson ${L.n}: ${esc(L.title)}</option>`).join('')}<option value="missed" ${scope==='missed'?'selected':''}>Review questions I missed</option></select></div><p class="micro">Tap an answer to see why each option is right or wrong. Progress is saved on this device.</p>${!all?`<div class="empty">No previously missed questions in this browser. Try the all-lessons quiz first. <button class="btn" data-all="1">All questions →</button></div>`:idx>=all?`<div class="results"><div class="smallcaps">Practice session summary</div><div class="resultnumber">${right}/${all}</div><p>${answered} answered. Review the explanations, or try missed questions again.</p><button class="btn primary" data-missed="1">Review incorrect answers</button> <button class="btn" data-restart="1">Start over</button></div>`:`<div class="quiz-meta"><span class="pill">Question ${idx+1} of ${all}</span> <span class="pill">${answered} answered · ${right} correct</span> <button class="btn" data-restart="1">Retake this set</button></div><div class="progress"><div style="width:${100*(idx+1)/all}%"></div></div>${renderQuestion(quizPool[idx])}<div class="quizfoot"><button class="btn" data-qprev="1" ${idx===0?'disabled':''}>← Previous</button><span class="score-chip">${answered}/${all} answered in this section</span><button class="btn primary" data-qnext="1" ${answerAt(quizPool[idx])?'':'disabled'}>${idx===all-1?'Finish / summary':'Next question →'}</button></div>`}`;updateTracker()}
+function renderQuestion(qi){const Q=QUESTIONS[qi],a=answerAt(qi),chosen=Number.isInteger(a?.chosen)?a.chosen:null;return `<section class="qcard"><div class="qtag">Lesson ${Q.n}: ${esc(LESSONS[Q.n-1].title)}</div><h2>${esc(Q.p)}</h2><div class="options">${Q.opts.map((o,i)=>`<button type="button" class="option ${chosen===i?'chosen':''} ${chosen!==null&&i===Q.right?'good':''} ${chosen===i&&i!==Q.right?'bad':''}" data-choose="${i}" ${chosen!==null?'disabled':''}><span class="dot">${String.fromCharCode(65+i)}</span><span>${esc(o[0])}</span></button>`).join('')}</div>${chosen!==null?feedback(qi):''}</section>`}
+function showMap(){let s=`<h2 class="lesson-title">All lessons</h2><p class="lead">Open any lesson, or quiz yourself on just that topic.</p><div class="overviewgrid">`;for(const L of LESSONS){let count=QUESTIONS.filter(q=>q.n===L.n).length;s+=`<div class="overviewcard"><div class="smallcaps">Lesson ${L.n} · ${esc(L.unit)}</div><b>${esc(L.title)}</b><p>${esc(L.goal)}<br>${L.concepts.length} concept notes · ${count} quiz questions</p><button class="btn" data-open="${L.n}">Read notes</button> <button class="btn soft" data-startquiz="${L.n}">Quiz</button></div>`} $('map').innerHTML=s+'</div><div class="scope-note">These notes are paraphrased summaries of the course lectures, not word-for-word transcripts.</div>'}
+function updateTracker(){$('tracker').textContent=`${answeredCount()} answered · ${correctCount()} correct`;}
+function printNotes(){const w=window.open('','_blank');if(!w){alert('Allow pop-ups to print the complete study notes, or use your browser’s Print command while on the Notes tab.');return}const css=document.querySelector('style').outerHTML;const content=LESSONS.map(L=>lessonHTML(L).replace(/<div class="lessonfoot">[\s\S]*?<\/div><\/article>/,'</article>')).join('');w.document.write(`<!doctype html><html><head><title>AZ-104 printable notes</title>${css}</head><body><main class="main"><h1>AZ-104 Study Notes</h1><p>Based on Alex Potasnick's AZ-104 course.</p>${content}</main></body></html>`);w.document.close();w.onload=()=>w.print()}
+function init(){const nav=$('nav');nav.innerHTML=`<div class="chapter-heading">Azure administration · 1-9</div>`+LESSONS.map(L=>(L.n===10?'<div class="chapter-heading">Governance & compliance · 10-17</div>':'')+`<button class="navitem ${L.n===lesson?'active':''}" data-lesson="${L.n}"><span class="navnum">${L.n}</span><span>${esc(L.title)}</span></button>`).join('');document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.view)setView(b.dataset.view);else if(b.dataset.lesson)changeLesson(Number(b.dataset.lesson));else if(b.dataset.open)changeLesson(Number(b.dataset.open));else if(b.dataset.nextlesson)changeLesson(Number(b.dataset.nextlesson));else if(b.dataset.startquiz){selectScope(b.dataset.startquiz);setView('quiz')}else if(b.dataset.choose!==undefined){const qi=quizPool[idx];if(!attempts[qi]){const chosen=Number(b.dataset.choose);attempts[qi]={chosen,wrong:chosen!==QUESTIONS[qi].right};save();showQuiz()}}else if(b.dataset.qprev){idx=Math.max(0,idx-1);showQuiz()}else if(b.dataset.qnext){idx=Math.min(quizPool.length,idx+1);showQuiz();window.scrollTo({top:0,behavior:'smooth'})}else if(b.dataset.restart){for(const k of quizPool)delete attempts[k];save();idx=0;showQuiz()}else if(b.dataset.missed){selectScope('missed')}else if(b.dataset.all){selectScope('all')}});$('quiz').addEventListener('change',e=>{if(e.target.id==='qscope')selectScope(e.target.value)});$('printbtn').addEventListener('click',printNotes);showNotes();updateTracker()}
+init();
+</script>
+</body></html>
